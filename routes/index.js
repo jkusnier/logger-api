@@ -10,4 +10,9 @@ router.get('/get', function(req, res) {
   res.json(["One - 1","Two - 2","Three - 3"]);
 });
 
+router.put('/put', function(req, res) {
+  console.log(req.body);
+  res.send('Log stored');
+});
+
 module.exports = router;
