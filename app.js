@@ -22,6 +22,33 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+
+  // check header or url parameters or post parameters for token
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  // decode token
+  if (token) {
+    var badToken = (token !== "g)djvbUGrGZEUGkLNnCoHVThgMrDKfzRkGtyXnbrhgoADVep6keRACgvCZYpnhbF");
+    // This is where we verify the token
+    if (badToken) {
+      return res.json({ success: false, message: 'Failed to authenticate token.' });
+    } else {
+      next();
+    }
+
+  } else {
+
+    // if there is no token
+    // return an error
+    return res.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    });
+    
+  }
+});
+
 app.use('/', index);
 app.use('/users', users);
 
